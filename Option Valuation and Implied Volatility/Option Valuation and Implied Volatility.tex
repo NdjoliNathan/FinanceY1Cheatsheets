@@ -1,0 +1,105 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[a4paper,
+\usepackage{microtype}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usetikzlibrary{calc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{lipsum}
+
+\title{Option Valuation and Implied Volatility}
+\author{Nathan NDJOLI - \href{mailto:nathan.ndjoli1@gmail.com}{nathan.ndjoli1@gmail.com}}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Realized volatility}
+
+In the Black and Scholes model, option pricing fundamentally depends on the volatility of the underlying asset's price, anticipated over the period between the option's valuation date and its expiration. Traditionally, this volatility can be assessed using the standard deviation of historical price movements of the underlying asset. However, this method, focusing solely on historical data, does not account for current market sentiments or future volatility expectations.
+
+\section{Implied volatility}
+
+To address these limitations, the concept of implied volatility is utilized. Unlike historical volatility, implied volatility reflects the market's consensus on future volatility, derived from the prices of highly liquid derivatives such as vanilla options. By using the Black-Scholes formula, which explicitly integrates volatility as a variable, implied volatility is computed.\\\\The formula equates the theoretical price derived under given volatility assumptions with the actual market price. However, since the Black-Scholes formula cannot be directly inverted to solve for volatility, numerical methods like the Newton-Raphson algorithm are employed to find the implied volatility that aligns the model's price with market prices.\\\\ The Newton-Raphson method is used to find the root of a function \( f \), i.e., \( x \) such that \( f(x) = 0 \).\\\\Starting with an initial guess \( x_0 \):\[f(x) \approx f(x_0) + f'(x_0)(x - x_0)\]If \( f(x) = 0 \):\[f'(x_0) \approx -\frac{f(x_0)}{x_1 - x_0}\]
+From this, we can deduce \( x_1 \):\[f'(x_1) \approx -\frac{f(x_1)}{x_2 - x_1}\]
+
+And so on...\\\\An essential aspect of implied volatility is that it remains consistent across both calls and puts due to the call-put parity, which relies solely on the principle of no-arbitrage without making further assumptions. This parity ensures that the difference in prices between calls and puts for the same strike price and expiry under Black-Scholes assumptions is mirrored in the market prices, confirming that the pricing approximation for both calls and puts is identical. Hence, implied volatility provides a more dynamic and market-reflective measure than historical volatility, offering critical insights for trading and hedging strategies.
+
+\section{Volatility Surface}
+
+Implied volatility exhibits a characteristic not captured by the Black-Scholes model: it varies according to the strike prices and maturities of options.\newline
+
+When the maturity of an option is fixed and the implied volatility for different strike prices is observed, we obtain what is known as "volatility skew" or "smile." When the strike price is held constant (usually equal to the current price of the underlying asset, or "spot") and the implied volatility for different maturities is examined, we observe the volatility term structure. Finally, when neither the strike price nor the maturity is fixed, we obtain a two-dimensional representation of volatility, called the "volatility surface."\newline
+
+Implied volatility can vary significantly based on the strike price of options, illustrating different shapes on the volatility surface, primarily classified into two categories: skew and smile.\newline
+
+Skew: This configuration of implied volatility suggests that out-of-the-money (OTM) call options and in-the-money (ITM) put options tend to display higher volatility, which can be interpreted as an anticipation of more pronounced downward movements than upward ones. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{skewpng.png}
+    \caption{Volatility skew}
+    \label{fig:skew}
+\end{figure}
+
+This reflects a greater concern for downside risks, often observable in equity markets where participants acquire protections against significant price drops. Such a distortion of volatility implies that negative returns are more pronounced than positive returns, diverging from the assumption of a log-normal distribution of returns.\newline
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{skewdistrib.png}
+    \caption{Skew implied and lognormal distribution}
+    \label{fig:skewdistrib}
+\end{figure}
+
+Smile: Unlike skew, the smile indicates increased volatility for options that are deep in-the-money (ITM) or out-of-the-money (OTM). This configuration is typical in commodity and foreign exchange markets, where there is a strong mean-reversion property.\newline
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{volatilitysmile.png}
+    \caption{Volatility smile}
+    \label{fig:smile}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{smiledistrib.png}
+    \caption{Smile implied and lognormal distribution}
+    \label{fig:smiledistrib}
+\end{figure}
+
+For example, if a currency becomes excessively valued, it tends to lose its appeal and its price is likely to revert to a mean, leading to an increase in volatility for options at these price extremes.\newpage
+
+\section{Volatility Term Structure}
+
+To analyze the term structure of volatility, it is essential to specify a particular strike price. Typically, in a stable market environment, this term structure displays a positive slope, indicating higher volatility at longer maturities.\newline
+
+Conversely, during periods of significant market fluctuations, the term structure tends to invert, with shorter maturities exhibiting greater volatility. This pattern stems from the mean-reverting nature of implied volatility. Trading strategies based on this structure may involve constructing positions like calendar spreads, which utilize options with varying maturities. \newline
+
+Regardless of the term structure's shape, the skew is generally steeper for short-term maturities, indicating that the skew value can experience significant changes over these shorter periods.\newline
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6955\textwidth]{VolTermStructure.png}
+    \caption{Volatility Term Structure}
+    \label{fig:voltermstruc}
+\end{figure}\newpage
+
+Ultimately, by integrating both the volatility skew and the term structure, we construct the volatility surface.\newline
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6955\textwidth]{ImpliedVolSurface.jpg}
+    \caption{Volatility Surface}
+    \label{fig:voltermstruc}
+\end{figure}\
+
+\end{document}

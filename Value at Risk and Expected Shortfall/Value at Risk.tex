@@ -1,0 +1,235 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{microtype}
+\pgfplotsset{compat=1.17}
+\usetikzlibrary{calc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{lipsum}
+\usepackage{tabularx}
+\usepackage{xcolor}
+
+\title{Value at Risk}
+\author{Nathan NDJOLI - \href{mailto:nathan.ndjoli1@gmail.com}{nathan.ndjoli1@gmail.com}}
+\date{July 2024}
+\begin{document}
+
+\maketitle
+
+\section{Principles of VaR Construction}
+
+\subsection{What is VaR?}
+
+\noindent Value at Risk (VaR) is a statistical measure that quantifies the level of financial risk within a firm, portfolio, or position over a specific time frame. VaR is defined for a given portfolio, time horizon, and confidence interval. The VaR at horizon \(h\) and probability level \(p\) is the value \(VaR_{h,p}\) such that the probability that the loss \(L_h\) does not exceed \(VaR_{h,p}\) is \(p\):\\
+\[P(L_h \leq VaR_{h,p}) = p\] where \(L_h\) represents the loss amount at horizon \(h\).\\
+
+\subsection{Graphical Representation}
+
+\noindent Graphically, VaR can be represented as a threshold on the loss distribution curve. The area under the curve to the left of the VaR point represents the confidence level \(p\), while the area to the right represents the potential losses that exceed the VaR threshold.\\
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{ValueAtRisk.png}
+    \caption{Calculation of VaR from the Probability Distribution of the Change in Portfolio Value; Confidence Level is X\%}
+    \label{fig:var-calculation}
+\end{figure}\\
+
+\subsection{Choice of Parameters}
+
+\noindent The calculation of VaR involves selecting several key parameters:\\\\
+\noindent - The probability \(p\), which represents the confidence level.\\
+\noindent - The horizon \(h\), which is the time period over which the VaR is calculated.\\
+\noindent - The probability distribution of returns, which is often assumed to follow a normal distribution but can be adjusted based on historical data.\\
+
+\subsection{Example}
+
+\noindent Consider a portfolio with an initial value of 200 million euros. The one-day return of the portfolio follows a normal distribution with a mean of 0.3\% and a standard deviation of 2\%. We want to determine the one-day VaR at the 95\% confidence level.\\
+
+\noindent The return \(R\) can be expressed as: \\
+\noindent \[R = \frac{V_1 - V_0}{V_0}\] Thus, \[V_1 - V_0 = RV_0 = G_1 = -L_1\]\\
+
+\noindent Let \(\mu_1\) be the expected loss in one day:\\
+\noindent \[\mu_1 = E(L_1) = -E(R)V_0 = -0.003 \times 200 = -0.6\]\\
+
+\noindent Let \(\sigma_1\) be the standard deviation of the one-day loss:\\
+\noindent \[\sigma_1^2 = V(L_1) = V(-R)V_0^2 \implies \sigma_1 = 0.02 \times 200 = 4\]\\
+
+\noindent Therefore, \(L_1\) follows a normal distribution \(N(-0.6, 4)\).\\
+
+\noindent We need to find \(VaR_{1,95\%}\) such that:\\
+\noindent \[P(L_1 < VaR_{1,95\%}) = 95\% \implies P\left( \frac{L_1 - (-0.6)}{4} < \frac{VaR_{1,95\%} - (-0.6)}{4} \right) = 95\%\]\\
+
+\noindent Thus,\\
+\noindent \[\frac{VaR_{1,95\%} - (-0.6)}{4} = 1.645 \implies VaR_{1,95\%} = (1.645 \times 4) - 0.6 = 5.98\]\\
+
+\noindent Hence,\\
+\noindent \[VaR_{1,p} = (\sigma_1 \times \text{threshold}) + \mu_1\]\\
+
+\noindent The VaR can be adjusted for different time horizons. \\
+\noindent Let \(L_h\) be the loss over \(h\) days:\\
+\noindent \[L_h = \sum_{j=1}^{h} L_1\]\\
+\noindent Therefore, the expected loss over \(h\) days is:\\
+\noindent \[\mu_h = h\mu_1\]\\
+\noindent The standard deviation over \(h\) days is:\\
+\noindent \[\sigma_h = \sqrt{h}\sigma_1\]\\
+\noindent Consequently, the VaR at horizon \(h\) and probability level \(p\) is:\\
+\noindent \[VaR_{h,p} = (\sqrt{h}\sigma_1 \times \text{threshold}) + h\mu_1\]\\
+\noindent If \(h\mu_1\) is small, we have:\\
+\noindent \[VaR_{h,p} = \sqrt{h}\sigma_1 \times \text{threshold}\] leading to:\\
+\noindent \[VaR_{h,p} = \sqrt{h} VaR_{1,p}\]\\
+
+\subsection{Banks' Use of VaR}
+
+\noindent VaR originated in the financial industry as a risk management tool and has become integral to banking regulation. It was popularized by JP Morgan's RiskMetrics system. Banks use VaR to assess the potential loss in their portfolios and to ensure they hold enough capital to cover potential losses. VaR is also used in regulatory frameworks to determine capital requirements.\\
+
+\subsection{Backtesting}
+
+\noindent Backtesting is a process used to verify the accuracy of the VaR model. It involves comparing the predicted VaR with actual losses to ensure the model is reliable. In banking regulation, backtesting plays a crucial role in determining the capital requirements, which are given by:\\
+\[K = \sqrt{10} \times \max\left( VaR_{t-1}, \frac{1}{60} \sum_{i=1}^{60} VaR_{t-i-1} \right)\]\\
+
+\section{Methods for VaR estimation}
+
+\subsection{Historical Simulation Method}
+
+\noindent The historical simulation method calculates VaR by using the historical distribution of portfolio returns. This method involves the following steps:\\\\
+1. Collecting historical return data for the portfolio.\\
+2. Calculating the change in portfolio value for each historical scenario.\\
+3. Ranking the losses in ascending order to determine the VaR at the desired confidence level.\\
+
+\noindent Consider a portfolio valued at 50 million euros, consisting of a single asset. The table below shows the simulated values of the asset and the portfolio for the last 100 trading days, along with the corresponding losses.\\
+
+\begin{table}[htbp]
+\centering 
+\begin{tabular}{|c|c|c|c|} 
+\hline
+Obs. & Return & Simulated Portfolio Value (M) & Simulated Loss (M) \\
+\hline
+1 & 11\% & 55.5 & -5.5 \\
+2 & 8.2\% & 54.1 & -4.1  \\
+3 & 7.5\% & 53.75 & -3.75  \\
+... & ... & ... & ...  \\
+94 & -4.2\% & 14.9 & 2.1  \\
+95 & -4.6\% & 47.7 & {2.3} \\
+96 & -5\% & 47.5 & 2.5  \\
+97 & -5.6\% & 47.2 & 2.8  \\
+98 & -6\% & 47 & 3  \\
+99 & -6.8\% & 46.6 & 3.4  \\
+100 & -10\% & 45 & 5  \\
+\hline
+\end{tabular}
+\caption{Simulation of Portfolio Values and Losses} 
+\label{tab:portfolio-simulation} 
+\end{table}\\
+
+\noindent The Value at Risk (VaR) of the portfolio can be determined by identifying the loss at the desired confidence level, for example, the 95th worst loss from our table of simulated portfolio values and losses. Here, it's 2.3M€.\\
+
+\noindent The historical simulation method is straightforward and applicable to all types of instruments. However, it has limitations, such as low responsiveness to recent market shocks and the assumption of risk factor stability.\\
+
+\subsection{Delta-Normal Method}
+
+\noindent The delta-normal method is a common approach for estimating Value at Risk (VaR), particularly in the context of financial risk management. It is based on several key assumptions and methodological steps. The first step involves estimating the variance-covariance matrix of the variations in risk factors, which may include asset prices, interest rates, exchange rates, etc. This matrix measures the volatility of each risk factor as well as the correlations between them. It is then assumed that the variations in risk factors follow a normal distribution, which simplifies the statistical calculations needed to estimate potential losses.\\
+
+\noindent The sensitivity of financial instruments to variations in risk factors is calculated, including measures such as the delta for options, which expresses the change in the value of the option based on small changes in the underlying asset price. It is also assumed that losses are a linear function of variations in risk factors. This assumption, while simplifying, facilitates the calculation of VaR but may not capture significant nonlinearities in the behavior of financial instruments, especially derivatives.\\
+
+\noindent Consider a portfolio composed of two risk factors, \( S_1 \) and \( S_2 \). The value of the portfolio as a function of these factors can be approximated by a first-order Taylor expansion around a reference point, often the current point:\\
+\[P(S_1, S_2) - P(0) = \frac{\partial P}{\partial S_1}(0)(S_1 - S_1(0)) + \frac{\partial P}{\partial S_2}(0)(S_2 - S_2(0))\]\\
+Where \( \Delta S_1 = S_1 - S_1(0) \) and \( \Delta S_2 = S_2 - S_2(0) \). \\\\Thus, we have:\\
+\[\Delta P = \frac{\partial P}{\partial S_1} \Delta S_1 + \frac{\partial P}{\partial S_2} \Delta S_2\]\\
+
+\noindent To illustrate this method, consider a portfolio containing options on Orange and Alcatel-Lucent stocks. For Orange options, the stock price is 20 euros with a daily volatility of 2\% and a total delta of 6000. For Alcatel-Lucent options, the stock price is 10 euros, with a daily volatility of 1\% and a total delta of 60,000. The correlation between the returns of the two stocks is 0.3. The price variations of the stocks can be expressed in terms of returns \( R_O \) and \( R_A \), defined as follows:\\
+
+\noindent For Orange:\\
+\[R_O = \frac{S_O - S_O(0)}{S_O(0)} = \frac{\Delta S_O}{S_O}\]\\
+
+\noindent For Alcatel-Lucent:\\
+\[R_A = \frac{S_A - S_A(0)}{S_A(0)} = \frac{\Delta S_A}{S_A}\]\\
+
+\noindent The portfolio variation \( \Delta P \) is then expressed as:\\
+\[\Delta P = 120000R_O + 600000R_A\]\\
+
+\noindent To calculate the VaR, it is necessary to determine the standard deviation of losses \( \sigma_{\Delta P} \), taking into account the standard deviations of the stock returns (\( \sigma_O \) and \( \sigma_A \)) and their correlation:\\
+\[\sigma^2_{\Delta P} = 120000^2 \sigma_O^2 + 600000^2 \sigma_A^2 + 2 \times 120000 \times 600000 \times \rho_{OA} \times \sigma_O \times \sigma_A\]\\
+
+\noindent With the following values: \( \sigma_O = 0.02 \) for the daily volatility of Orange stock, \( \sigma_A = 0.01 \) for the daily volatility of Alcatel-Lucent stock, and \( \rho_{OA} = 0.3 \) for the correlation, the standard deviation of the portfolio's losses \( \sigma_{\Delta P} \) can be calculated. Subsequently, the calculation of VaR at a 95\% confidence level is performed by multiplying \( \sigma_{\Delta P} \) by the quantile of the normal distribution corresponding to this confidence level (1.645 for 95\%).\\
+
+\noindent The delta-normal method has advantages such as the simplicity and speed of calculations. However, it is limited by the linearity assumption, which does not capture complex nonlinearities, especially in derivative products, and the normality assumption, which can underestimate risk in stressed market situations where return distributions are often non-normal. \\
+
+\subsection{Monte Carlo Simulation}
+
+\noindent The Monte Carlo simulation method offers an alternative to traditional model-building approaches for estimating Value at Risk (VaR). This technique involves simulating the probability distribution of changes in portfolio value (\(\Delta P\)) by repeatedly revaluing the portfolio under different scenarios. To illustrate the process, let's consider the calculation of a 1-day VaR for a given portfolio using Monte Carlo simulation.\\
+
+\noindent Firstly, the current value of the portfolio is determined using the prevailing market variables. This step establishes the baseline from which changes in value will be measured. Next, a sample is drawn from the multivariate normal distribution of the risk factors (\(\Delta x_i\)). This distribution represents the possible changes in market variables such as interest rates, stock prices, and exchange rates.\\
+
+\noindent Once the sample of \(\Delta x_i\) is obtained, these values are used to adjust the market variables to their potential new values at the end of the day. The portfolio is then revalued based on these new market conditions. The difference between the portfolio's value at the start of the day and its revalued amount at the end gives a sample \(\Delta P\), representing the change in portfolio value for that specific scenario.\\
+
+\noindent This procedure (sampling from the distribution, revaluing the portfolio, and calculating \(\Delta P\)) is repeated multiple times, typically thousands of times, to build a comprehensive probability distribution for \(\Delta P\). For instance, if 5,000 samples are generated, the 1-day VaR at the 99\% confidence level is determined by identifying the 50th worst outcome in the distribution. Similarly, the 1-day VaR at the 95\% confidence level corresponds to the 250th worst outcome.\\
+
+\noindent For an N-day VaR, the calculation is generally scaled from the 1-day VaR, often by multiplying the 1-day VaR by \(\sqrt{N}\), under the assumption that daily changes are independent and identically distributed.\\
+
+\noindent One significant drawback of Monte Carlo simulation is its computational intensity. A portfolio comprising hundreds of thousands of instruments must be revalued multiple times, which can be time-consuming. To mitigate this, a partial simulation approach can be employed. This method assumes a linear or simplified relationship between \(\Delta P\) and the risk factors \(\Delta x_i\), allowing the process to skip direct portfolio revaluation and instead estimate \(\Delta P\) directly from the sampled \(\Delta x_i\).\\
+
+\noindent This approach accelerates the simulation process by reducing the computational burden associated with full portfolio revaluation, making it a practical compromise between accuracy and efficiency. Despite its challenges, Monte Carlo simulation remains a powerful tool for estimating VaR, especially when dealing with complex portfolios and nonlinear risks.\\
+
+
+\section{VaR as a Risk Measure: Relevance}
+
+\noindent The Value at Risk (VaR) has become a standard risk measure due to its ability to provide a single, synthetic indicator of risk. This measure takes into account the interactions between various risk factors, offering a comprehensive view of the total risk exposure faced by a financial institution. VaR is widely used by banking institutions both for internal risk management and for regulatory compliance.\\
+
+\noindent VaR offers several advantages, including its capacity to consolidate various risk factors into a single metric, making it easier for senior management to understand and monitor risk levels. It serves as a global risk indicator that helps in assessing potential losses under normal market conditions. Additionally, VaR is instrumental in the regulatory framework, guiding the capital reserves that financial institutions must maintain to cover potential losses.\\
+
+\noindent Despite its widespread use, VaR has several technical limitations. One major issue is that it assumes all positions are marked to market, which may not always be feasible or accurate. Moreover, VaR relies on the assumption that returns follow a normal distribution, which often does not hold true in practice, especially during periods of market stress. Furthermore, VaR does not provide information about the potential severity of losses beyond the specified threshold, leaving institutions uncertain about the scale of losses if they exceed the VaR estimate.\\
+
+\noindent Conceptually, VaR assumes that the portfolio remains unchanged over the considered time horizon, which is rarely the case in dynamic markets. Additionally, VaR is not a subadditive measure, meaning that the risk of a combined portfolio can exceed the sum of the individual risks of its components. This limitation was highlighted by Artzner, Delbaen, Eber, and Heath in 1999, emphasizing the potential for VaR to underestimate risk in diversified portfolios.\\
+
+\noindent Consider two independent projects, A and B, each with the following risk profiles:\\\\
+- \(-10\) billion with a probability of 0.02\\
+- \(-1\) billion with a probability of 0.98\\\\
+The losses for these projects can be ranked as follows:\\\\
+- 1 billion with a probability of 0.98\\
+- 10 billion with a cumulative probability of 1\\\\
+Now, consider a portfolio \(P\) containing both projects A and B. The loss distribution for the portfolio \(P\) is:\\\\
+- \(-20\) billion with a probability of \(0.02^2 = 0.0004\)\\
+- \(-2\) billion with a probability of \(0.98^2 = 0.9604\)\\
+- \(-11\) billion with a probability of \(2 \times 0.98 \times 0.02 = 0.0392\)\\\\
+The losses for the combined portfolio can be ranked as follows:\\\\
+- 2 billion with a probability of 0.9604\\
+- 11 billion with a cumulative probability of 0.9996\\
+- 20 billion with a cumulative probability of 1\\\\
+This example illustrates the limitations of VaR, particularly its inability to account for the combined risk accurately. It highlights the need for complementary risk measures, such as Expected Shortfall.\\
+
+\section{Expected Shortfall}
+
+\noindent Expected Shortfall (ES), also known as Conditional Value at Risk (CVaR), is a critical risk measure in financial risk management, designed to provide a comprehensive assessment of potential losses in extreme scenarios. Unlike Value at Risk (VaR), which estimates the maximum potential loss over a specified period at a certain confidence level, ES quantifies the expected loss on days when the loss exceeds the VaR threshold. This characteristic makes ES particularly valuable for capturing tail risk, providing a more complete picture of potential financial distress.\\
+
+\noindent The formal definition of ES can be expressed as follows: Given a loss distribution over a specific time horizon, and a VaR threshold \( VaR_{h,p} \) at horizon \( h \) and confidence level \( p \), the ES is defined by:
+
+\[ ES_{h,p} = E(L \mid L > VaR_{h,p}) \]
+
+\noindent where \( L \) represents the loss. This measure provides the expected value of losses exceeding the VaR, thus offering a risk assessment beyond the standard VaR metric.\\
+
+\noindent One of the main advantages of ES over VaR is its property of subadditivity, which ensures that the ES of a combined portfolio does not exceed the sum of the ES values of the individual components. This aligns with the fundamental principle of diversification, whereby spreading investments across diverse assets can reduce overall risk. In contrast, VaR may not exhibit subadditivity, potentially leading to an underestimation of risk in diversified portfolios.\\
+
+\noindent The regulatory landscape has increasingly favored ES over VaR, particularly in the context of the Basel Accords, which govern capital requirements for banks. The Basel IV framework, for instance, mandates the use of ES at a 97.5\% confidence level for determining the capital reserves required to cover market risks. This shift underscores the recognition of ES as a more reliable measure for capturing extreme risks, especially under volatile market conditions.\\
+
+\noindent To illustrate the calculation of ES, consider two independent projects, A and B, each with defined loss distributions. The ES at the 97.5\% confidence level for these projects is computed as follows:
+
+\[ ES(A)_{97.5\%} = \frac{0.005}{0.025} \times 1 + \frac{0.02}{0.025} \times 10 = 8.2 \]
+
+\[ ES(B)_{97.5\%} = \frac{0.005}{0.025} \times 1 + \frac{0.02}{0.025} \times 10 = 8.2 \]
+
+When these projects are combined, the expected shortfall for the portfolio is calculated, demonstrating the subadditive nature of ES:
+
+\[ ES(A + B)_{97.5\%} = \frac{0.0246}{0.025} \times 11 + \frac{0.0004}{0.025} \times 20 = 11.14 \]
+
+\noindent This example underscores the importance of ES in providing a more nuanced understanding of risk, particularly in scenarios involving large, potential losses. The higher value of ES for the combined portfolio reflects the aggregation of extreme risks, offering critical insights for risk management strategies.\\
+
+\noindent Expected Shortfall serves as a crucial tool in the arsenal of risk management professionals, offering an enhanced capability to gauge the severity of potential losses under adverse conditions. Its adoption in regulatory frameworks and widespread use in financial institutions underscore its value in maintaining financial stability and resilience. As financial markets become increasingly complex, the importance of robust and comprehensive risk measures like ES cannot be overstated, ensuring that institutions are better prepared to navigate periods of market turbulence.\\
+
+
+\end{document}

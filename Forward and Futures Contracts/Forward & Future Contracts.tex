@@ -1,0 +1,113 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tabularx}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\title{Forward \& Future Contracts}
+\author{Nathan NDJOLI - \href{mailto:nathan.ndjoli1@gmail.com}{nathan.ndjoli1@gmail.com}}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\section*{Definitions}
+
+    \noindent A future or forward contract is a firm commitment to buy or sell a specified quantity of an underlying asset (stock, index, rate, currency, commodity, etc.) at an agreed price on a future date. The buyer of the contract takes a long position, while the seller takes a short position. \\
+    
+    \noindent Forward contracts are non-standardized futures contracts whose characteristics are defined by the two parties. They are traded over-the-counter (OTC) on markets such as the foreign exchange market or the forward rate agreement market. They offer flexibility in terms, but present a higher counterparty risk and are less liquid. \\
+    
+    \noindent Futures contracts are standardized contracts whose characteristics are defined by a market institution. They are traded on organized exchanges. They offer transparency, high liquidity, and reduced counterparty risk thanks to a clearinghouse. However, they offer less flexibility and require margin calls. \\
+
+\section*{Spot Price and Futures Price Relationship}
+
+    \noindent In the analysis of derivative contracts, particularly focusing on the relationship between spot prices and futures prices, it is crucial to consider several key factors. Firstly, the price of the underlying asset at a given time \( t \) is denoted by \( S_t \). The price of the underlying asset at time 0 is referred to as \( S_0 \). Additionally, the price of the futures contract maturing at time \( T \) at time 0 is denoted as \( F_0 \). Furthermore, there exists a continuous annual risk-free rate for lending and borrowing, denoted by \( i \). We assume the absence of arbitrage opportunities and transaction costs, which simplifies our model. \\
+
+    \subsection*{Reminder}
+
+        \noindent When \( n \) represents the number of interest payments per year, an amount of 1 euro compounded at the rate \( r \) yields \( (1 + \frac{r}{n})^n \) after one year. As \( n \) approaches infinity, the interest rate transitions to a continuous model, leading to the equation:
+        \[ \lim_{n \to \infty} (1 + \frac{r}{n})^n = e^r \]
+        This means that if we use a continuous rate denoted \( i \), an amount of 1 euro compounded at this rate grows to \( e^i \) after one year and to \( e^{iT} \) after \( T \) years. This concept is fundamental in financial mathematics as it simplifies the calculation of the future value of investments and loans over continuous compounding periods. \\
+        
+    \subsection*{Parity Relationship}
+
+        \noindent We consider two distinct operations. In the first one, an investor buys the underlying asset at time 0 at the price \( S_0 \), financing this purchase with a loan of \( S_0 \), and holds the asset until time \( T \). In the second operation, the investor buys the underlying asset at time \( T \) at the futures price \( F_0 \). At equilibrium, to prevent arbitrage opportunities, the following relationship must hold:
+        \[ F_0 = S_0 e^{iT} \]
+        
+        \noindent If the futures price \( F_0 \) is greater than \( S_0 e^{iT} \), a cash and carry arbitrage opportunity arises. This strategy involves buying the underlying asset at time 0, financed by a loan of \( S_0 \), holding it until time \( T \), and then selling it at the futures price \( F_0 \). The resulting cash flow at time \( T \) is \( F_0 - S_0 e^{iT} \), which is positive, indicating a risk-free profit. \\
+        
+        \noindent\begin{tabularx}{\textwidth}{|Y|Y|Y|}
+            \hline
+            \textbf{Strategy} & \textbf{Time 0} & \textbf{Time T} \\ \hline
+            Cash \& Carry & \( -S_0 +S_0 \) & \( + F_0 -S_0 e^{iT} \) \\ \hline
+        \end{tabularx}\\\\
+        
+        \noindent Conversely, if the futures price \( F_0 \) is less than \( S_0 e^{iT} \), a reverse cash and carry arbitrage strategy is feasible. This involves selling the underlying asset short at time 0, investing the proceeds \( S_0 \) until time \( T \), and repurchasing the asset at the futures price \( F_0 \) to deliver. The cash flow at time \( T \) is \( -F_0 + S_0 e^{iT} \), which is again positive, indicating a risk-free profit. \\
+
+        \noindent\begin{tabularx}{\textwidth}{|Y|Y|Y|}
+            \hline
+            \textbf{Strategy} & \textbf{Time 0} & \textbf{Time T} \\ \hline
+            Reverse Cash \& Carry & \( +S_0 \)  & \( -F_0 + S_0 e^{iT} \) \\ \hline
+        \end{tabularx}\\\\
+
+        \noindent These arbitrage opportunities illustrate that a futures contract can be synthesized or duplicated using the underlying asset and a loan at the risk-free rate. Consequently, there is a direct relationship between the futures price \( F_0 \) and the spot price \( S_0 \). The price of the futures contract maturing at time \( T \) is intrinsically linked to the expected future spot price \( S_T \). This parity relationship assumes that the underlying asset can be freely bought and sold in the spot market without any frictions. \\
+
+
+    \subsection*{Cost of Carry and Basis}
+
+        \noindent Further examination reveals the cost of carry and the concept of basis in futures pricing. The parity relationship can be rewritten as:
+        \[ F_0 - S_0 = S_0 e^{iT} - S_0 \]
+        The term \( F_0 - S_0 \) is known as the basis, representing the difference between the futures price and the spot price. If \( F_0 \) is greater than \( S_0 \), the futures price is said to be in contango relative to the spot price. Conversely, if \( F_0 \) is less than \( S_0 \), the futures price is said to be in backwardation relative to the spot price.\\
+        
+        \noindent   The term \( S_0 e^{iT} - S_0 \) represents the cost of carry, which includes storage costs, insurance, and financing costs associated with holding the underlying asset until the futures contract matures. \\
+
+        
+        
+\section*{Examples of Futures Contracts Usage}
+    \subsection*{Hedging Operations}
+        \subsubsection*{Agricultural Products}
+        
+            \noindent A farmer selling wheat and a food processing company buying it might worry about price fluctuations at harvest. They can agree that the farmer will sell 100 tonnes of wheat to the company at the end of September for 245 euros per tonne. At the end of September, the farmer delivers the 100 tonnes of wheat to the company. If the spot price of wheat at this time is 240 euros per tonne, the forward contract ensures the farmer still receives the agreed-upon price of 245 euros per tonne, securing a total revenue of 24,500 euros. Without the forward contract, selling at the spot price would result in only 24,000 euros. This contract benefits both parties: the farmer locks in a selling price, ensuring steady revenue even if market prices drop, which allows better resource planning. Meanwhile, the food processing company secures a purchase price, stabilizing costs and aiding in financial planning. This agreement protects both from adverse price movements, creating financial stability.
+    
+        \subsubsection*{Currencies}
+        
+            \noindent Consider an American company that expects to receive 37,500,000 yen from a Japanese client in mid-December. To hedge against exchange rate fluctuations, the company enters into three CME futures contracts, each for 12,500,000 yen, at a price of 0.006813 dollars per yen. In mid-December, the company receives the 37,500,000 yen from the Japanese client. The spot price of the yen at this time is 0.006915 dollars per yen, and the futures contract price is 0.0069 dollars per yen. By using the futures contracts, the company effectively converts the yen at the futures rate, securing 255,487.50 dollars (37,500,000 yen x 0.006813 dollars per yen). If the company had not hedged and instead converted the yen at the spot rate of 0.006915 dollars per yen, it would have received 259,312.50 dollars. Thus, the futures contract locks in a lower, but guaranteed, amount of 255,487.50 dollars, providing protection against the risk of unfavorable currency fluctuations. 
+
+    \subsection*{Speculative Operations}
+       
+        \noindent Today, the spot price of a tonne of corn is 225 euros, and the forward price maturing at the end of December is 228 euros. Anticipating that the spot price of corn will rise to 230 euros by the end of December due to weather conditions, I decide to buy 200 forward contracts on corn, with each contract covering 50 tonnes. This positions me to purchase 10,000 tonnes of corn at 228 euros per tonne. If my prediction is correct and the spot price does indeed rise to 230 euros per tonne, I can sell the corn at the higher spot price. The profit from this speculative operation would be the difference between the spot price and the forward price, multiplied by the total quantity. Specifically, I would earn (230 euros - 228 euros) x 10,000 tonnes = 20,000 euros. Thus, by buying the forward contracts, I leverage my market anticipation to secure a potential profit based on the expected price increase. \\
+        
+
+\section*{Discussion \& Developments}
+    \subsection*{Variants According to the Type of Underlying Asset}
+        \subsubsection*{Case of a Remuneration Paid by the Underlying Asset}
+        
+            \noindent When the underlying asset pays a remuneration, denoted as \(D\), at a time \(t^*\) between 0 and \(T\), the forward price parity relationship is adjusted to: \[F_0 = (S_0 - D^*) e^{iT}\] Here, \(D^*\) represents the present value of the remuneration, calculated as: \[D^* = D e^{-it^*}\] This adjustment ensures accurate pricing by accounting for the impact of the remuneration on the asset's value. \\
+
+            \noindent To demonstrate this relationship, consider two distinct scenarios. In the first case, if:   \[F_0>(S_0 - D^*) e^{iT}\] An arbitrage opportunity arises through a cash and carry strategy. This strategy involves purchasing the underlying asset at time 0, financed by a loan of \(S_0\), holding the asset until time \(T\), and then selling it at \(F_0\), thus realizing an arbitrage profit.\\
+            
+            \noindent In the second case, if: \[F_0<(S_0 - D^*) e^{iT}\] A reverse cash and carry strategy is feasible. This strategy involves selling the underlying asset at time 0 and investing the proceeds until time \(T\), then repurchasing the asset at \(F_0\), thereby realizing a risk-free profit. \\
+            
+        \subsubsection*{Case of Commodity Contracts}
+        
+            \noindent For commodity contracts, the cost of storage is an essential element to consider. If the present value at time 0 of the storage cost, denoted \(U^*\), is paid between 0 and \(T\), the forward price is calculated as: \[F_0 = (S_0 + U^*) e^{iT}\] If the storage cost is paid annually and proportionally to the price of the underlying asset, represented by \(u\), the forward price becomes: \[F_0 = S_0 e^{(i+u)T}\] These formulas take into account the financial implications of storing commodities over the contract duration. \\
+
+            \noindent The concept of opportunity yield, indicated by \(y\), further refines the forward pricing model. In a scenario where the opportunity yield impacts pricing, the equations adjust to: \[F_0 = S_0 e^{(i-y)T} + U^* e^{iT}\] Or: \[F_0 = S_0 e^{(i+u-y)T}\] Depending on whether the storage cost is included and how it is paid. This reflects the trade-off between the returns from holding the asset and potential earnings from alternative investments. \\
+        
+        \subsubsection*{Case of Index Contracts}
+        
+            \noindent For index contracts, which typically involve assets providing a continuous dividend yield at rate \(q\), the forward price is modeled as: \[F_0 = S_0 e^{(i-q)T}\] This adjustment accounts for the continuous dividends received from holding the index, which impact its valuation over the contract's duration. \\
+        
+        \subsubsection*{Case of Currency Contracts}
+            
+            \noindent Currency contracts present a unique scenario as currencies can be invested at the risk-free rate of the issuing country. Here, the forward price relationship is given by: \[F_0 = S_0 e^{(i-i_f)T}\] Where \(S_0\) is the spot price of the foreign currency in domestic terms, and \(i_f\) is the risk-free rate of the foreign currency. This model captures the interest rate differential between the two currencies, influencing the forward price. \\
+        
+    \subsection*{Limitations of the Cash \& Carry Model}
+    
+        \noindent Although the cash and carry model is theoretically sound, it encounters practical limitations. Transaction costs are significant in the real world and can diminish or negate arbitrage profits. Additionally, the feasibility of short selling certain assets may be restricted, limiting the implementation of reverse arbitrage strategies. Moreover, discrepancies between borrowing and lending rates can further complicate the realization of arbitrage opportunities, as differing rates affect the net profit from such strategies. These considerations highlight the complexities involved in practical arbitrage and the necessity of incorporating real-world frictions into theoretical models for accurate pricing and strategy development. \\
+        
+\end{document}

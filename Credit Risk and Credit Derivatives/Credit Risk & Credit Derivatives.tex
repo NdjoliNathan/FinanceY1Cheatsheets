@@ -1,0 +1,273 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{multirow}
+
+\title{Credit Risk}
+\author{Nathan NDJOLI - \href{mailto:nathan.ndjoli1@gmail.com}{nathan.ndjoli1@gmail.com}}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Default probabilities \&\ Credit spread}
+
+\noindent Cumulative default probability, denoted as \( \phi_t \), represents the likelihood of default occurring by a given time \( t \). For example, it can be used to estimate the chance of a borrower defaulting by a certain date based on historical data or predictive models. \\
+
+\noindent Unconditional default probability, denoted as \( p_t \), is the probability of default occurring specifically during period \( t \). The relationship between cumulative and unconditional default probabilities is expressed as \
+
+\[\phi_t = \sum_{i=1}^{t} p_i\]
+
+\noindent indicating that the cumulative probability up to time \( t \) is the sum of the unconditional probabilities for all preceding periods. \\
+
+\noindent Conditional default probability, denoted as \( h_t \), refers to the likelihood of default during period \( t \), given that no default has occurred prior to this period. This is calculated using the formula \
+
+\[p_t = (1 - \phi_{t-1})h_t\]
+
+\noindent Where \( \phi_{t-1} \) represents the cumulative default probability up to the period before \( t \). \\
+
+\noindent An annual transition matrix illustrates the probability of a borrower moving from one risk category to another over the course of a year. This matrix is crucial for understanding the migration of credit ratings and assessing the likelihood of changes in credit risk over time. \\
+
+\noindent The risk of default can be analyzed using the credit spread curve, which compares the yield of a borrower's bond with that of a risk-free bond of the same maturity. This difference, known as the spread, provides insight into the default risk premium demanded by investors. For a risk-neutral investor, the relationship can be expressed as \
+
+\[e^{i t} = \phi_t e^{y t} + (1 - \phi_t)e^{y t}\]
+
+\noindent Simplifying to \
+
+\[e^{i t} = e^{y t} [1 - \phi_t (1 - \epsilon)]\]
+
+\noindent Here, \( i_t \) is the risk-free rate, \( y_t \) is the asset yield, \( \phi_t \) is the cumulative default probability, and \( \epsilon \) is the recovery rate. \\
+
+\noindent The formula \
+
+\[\ln[e^{i t}] = \ln[e^{y t}] + \ln[1 - \phi_t (1 - \epsilon)]\]
+
+\noindent Leads to \
+
+\[i_t - y_t = \frac{1}{t} \ln[1 - \phi_t (1 - \epsilon)]\]
+
+\noindent indicating that the spread \( s_t \) at maturity \( t \) can be approximated by \
+
+\[s_t \approx \frac{\phi_t (1 - \epsilon)}{t}\]
+
+\noindent for small values of \( \phi_t \). This provides a method to estimate cumulative default probability \
+
+\[\phi_t \approx \frac{t s_t}{1 - \epsilon}\]
+
+\noindent From cumulative probabilities, one can derive unconditional default probabilities \
+
+\[p_t = \phi_t - \phi_{t-1}\]
+
+\noindent For example, with observed spreads for maturities of 1, 2, 3, and 4 years, and assuming a recovery rate of 35\%\, one can calculate the default probabilities for each year. \\
+
+\[
+\begin{array}{|c|c|c|c|}
+\hline
+\text{Maturity} & \text{Spread} & \phi_t & p_t \\ \hline
+1 \, \text{year} & 0.5\% & 0.769\% & 0.769\% \\ \hline
+2 \, \text{years} & 0.44\% & 1.354\% & 0.585\% \\ \hline
+3 \, \text{years} & 0.38\% & 1.754\% & 0.400\% \\ \hline
+4 \, \text{years} & 0.3\% & 1.846\% & 0.092\% \\ \hline
+\end{array}
+\]
+
+
+
+\section{The Merton Model (1974)}
+
+\noindent The Merton model (1974) provides a framework for modeling credit risk by treating a firm's equity and debt as options on the firm's assets. The firm's asset value \( V_t \), equity \( E_t \), and debt \( B_t \) are key variables, with the volatility of the asset \( \sigma \) and the risk-free rate \( i \) influencing the valuation. In this model, the firm's equity at time \( T \) is valued as \
+
+\[E_T = \max[V_T - D, 0]\]
+
+\noindent and debt as \
+\[B_T = D - \max[D - V_T, 0]\]\\
+
+\newpage \noindent This setup is analogous to the Black-Scholes model, with equity and debt represented as \
+
+\[E_t = V_t N(d_1) - De^{-i(T-t)} N(d_2)\]
+
+\noindent and \
+
+\[B_t = V_t - E_t = V_t (1 - N(d_1)) + De^{-i(T-t)} N(d_2)\]\\
+
+\noindent Where \( d_1 \) and \( d_2 \) are specific functions of the asset value, debt level, and other parameters. \\
+
+\noindent The risky interest rate \( y_T \) is derived from \
+
+\[D = B_t e^{y_T (T-t)}\]
+
+\noindent resulting in \
+
+\[y_T = \frac{1}{T - t} \ln \frac{D}{B_t}\]
+
+\noindent An example involving a firm with an asset value of 420, asset volatility of 16.76\%\, a risk-free interest rate of 5\%\, and zero-coupon debt maturing in 3 years with a face value of 280 demonstrates how to calculate the credit spread using this model. \\
+
+
+\noindent We calculate \( d_1 \) and \( d_2 \) as follows: \\
+
+\[ d_1 = \frac{\ln\left(\frac{420}{280}\right) + 3\left(0.05 + \frac{0.1676^2}{2}\right)}{0.1676 \times \sqrt{3}} \approx 2.06 \]
+
+\[ d_2 = d_1 - 0.1676 \times \sqrt{3} \approx 1.77 \]
+
+\noindent Using the cumulative distribution function values: \\
+\[ N(d_1) = 0.9803 \] 
+\[ N(d_2) = 0.9616 \] \\
+
+\noindent The equity value \( E_t \) is calculated as: \\
+\[ E_t = 420 \times 0.9803 - 280 \times e^{-0.05 \times 3} \times 0.9616 \]
+\[ E_t \approx 179.98 \]\\
+
+\noindent The debt value \( B_t \) is: \\
+\[ B_t = V_t - E_t = 420 - 179.98 \approx 240.02 \]\\
+
+\noindent The risky interest rate \( y_t \) is determined as follows: \\
+\[ y_t = \frac{1}{3} \ln\left(\frac{280}{240.02}\right) \approx 0.0514  \]\\
+
+\noindent The credit spread \( s_t \) is: 
+\[ s_t = y_t - 0.05 \approx 0.0014 \text{ or } 0.14\% \]\\
+
+\noindent Bankruptcy costs, which represent a fraction \( \lambda \) of the firm's asset value, are considered by adjusting the debt valuation formula to:
+\[ B_t = V_t (1 - \lambda)(1 - N(d_1)) + De^{-i(T-t)} N(d_2) \]\\
+\noindent For instance, using \( \lambda = 40\% \), the debt value can be calculated as:
+\[ B_t = 420 (1 - 0.40)(1 - 0.9803) + 280 e^{-0.05 \times 3} \times 0.9616 \approx 236.71 \]\\
+
+\noindent The risky interest rate \( y_t \) is determined as follows: \\
+\[ y_t = \frac{1}{3} \ln\left(\frac{280}{236.71}\right) \approx 0.056 \]\\
+
+\noindent The credit spread \( s_t \) is: 
+\[ s_t = y_t - 0.05 \approx 0.006 \text{ or } 0.6\% \]
+
+\section{Credit Derivatives}
+\noindent Credit derivatives, particularly Credit Default Swaps (CDS), are instruments used to manage credit risk. A CDS provides the buyer with protection against the default of a reference asset, compensating for the difference in the asset's value before and after a credit event, in exchange for regular premium payments.\\
+
+\noindent On January 1, 2000, a bank purchased a bond maturing at the end of 2007, issued at par, for an amount of 100,000,000 euros. To hedge against the issuer's default risk (which would result in a 40\% loss in value), on April 1, 2002, the bank bought a Credit Default Swap (CDS) with a 5-year maturity for the same amount. The annual premium for the CDS is 150 basis points. \\
+
+\noindent Credit Default Swaps (CDS) offer protection against the default risk of an issuer by covering potential losses up to a specified amount, in this case, €40,000,000. Over a 5-year period, the total cost of this protection, reflected in the annual premiums paid, amounts to €7,500,000.\\
+
+\noindent CDS function as insurance against credit risk, similar to a put option with the reference asset being the underlying security. The premium paid for a CDS provides insight into the market's perception of the likelihood of default by the issuer of the underlying asset. This premium is essentially a measure of the anticipated credit risk, as evaluated by financial markets, and serves as an important indicator for investors and analysts alike.\\
+
+\subsection{CDS Market \&\ Regulatory Changes}
+
+\noindent Credit Default Swaps (CDS) were central to the financial turmoil during the 2007-2008 financial crisis. These derivatives allowed investors to hedge against or speculate on the credit risk of various entities, including financial institutions and sovereign states. The widespread use of CDS exacerbated the crisis, particularly when the market's exposure to default risk became apparent. The failure of major financial institutions, such as Lehman Brothers, highlighted the systemic risk posed by CDS contracts, as they amplified losses and uncertainty across the financial system.\\
+
+\noindent During the sovereign debt crisis, CDS played a significant role in the financial markets' perception of sovereign credit risk, notably in Greece. Speculation in the CDS market led to a dramatic increase in the CDS spreads on Greek debt, reflecting growing investor concern over the country's ability to meet its financial obligations. The soaring spreads not only indicated a higher perceived risk of default but also contributed to the rise in borrowing costs for Greece. This speculation created a feedback loop, worsening the financial situation and deepening the crisis.\\
+
+\noindent These developments underscored the need for regulatory reforms to curb excessive speculation and enhance market stability. Measures such as the prohibition of naked CDS positions and the increased role of clearinghouses were introduced to mitigate these risks, aiming to foster a more transparent and resilient financial system.\\
+
+\subsection{Valuation of CDS}
+
+\noindent The following table summarizes the cash flows of a Credit Default Swap (CDS):
+
+\begin{table}[h!]
+    \centering
+    \renewcommand{\arraystretch}{1.0} % Adjust row height
+    \setlength{\tabcolsep}{8pt} % Adjust column width
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Event at \( t \)} & \textbf{Buyer} & \textbf{Seller} \\ \hline
+        No default & \begin{tabular}[c]{@{}c@{}}Pays the \\ premium\end{tabular} & \begin{tabular}[c]{@{}c@{}}Receives the \\ premium\end{tabular} \\ \hline
+        \multirow{2}{*}{Default} & \begin{tabular}[c]{@{}c@{}}Receives \\ compensation\end{tabular} & \begin{tabular}[c]{@{}c@{}}Pays \\ compensation\end{tabular} \\ 
+        & \begin{tabular}[c]{@{}c@{}}Pays the premium \\ \textit{pro rata temporis}\end{tabular} & \begin{tabular}[c]{@{}c@{}}Receives the premium \\ \textit{pro rata temporis}\end{tabular} \\ \hline
+    \end{tabular}
+\end{table}
+
+\noindent The determination of the CDS premium is based on the following equation: \\
+
+\[ E(PV_{ND}(P)) + E(PV_{D}(P)) = E(PV_{D}(C)) \]
+
+\noindent Where:\\
+\newline\noindent •\hspace{1em}\( PV_{ND}(P) \) is the present value of the premium in the absence of default;
+\newline\noindent •\hspace{1em}\( PV_{D}(P) \) is the present value of the premium in the event of default;
+\newline\noindent •\hspace{1em}\( PV_{D}(C) \) is the present value of the compensation in the event of default.\\
+
+\noindent An example calculates the CDS premium for a reference entity with a conditional default probability of 3\%\ per year, a 4-year maturity, a recovery rate of 40\%\, and a continuous interest rate of 5\%\. \\
+
+\begin{table}[h!]
+\centering
+\resizebox{1.05\linewidth}{!}{
+\begin{tabular}{|c|c|c|c|}
+\hline
+Dates & Premium & Survival Prob. & PV of Expected Payment \\ \hline
+1     & \( S \) & 0.97 & \( 0.97 \cdot e^{-0.05 \cdot 1} = 0.9227 S \) \\ \hline
+2     & \( S \) & 0.9409 & \( 0.9409 \cdot e^{-0.05 \cdot 2} = 0.8465 S \) \\ \hline
+3     & \( S \) & 0.9127 & \( 0.9127 \cdot e^{-0.05 \cdot 3} = 0.7732 S \) \\ \hline
+4     & \( S \) & 0.8853 & \( 0.8853 \cdot e^{-0.05 \cdot 4} = 0.7031 S \) \\ \hline
+\textbf{Total} &       &                       & \textbf{3.2455 \( S \)} \\ \hline
+\end{tabular}
+}
+\caption{Present Value of the Premium in the Absence of Default}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\resizebox{1.05\linewidth}{!}{
+\begin{tabular}{|c|c|c|c|}
+\hline
+Dates & Premium & Default Prob. & PV of Expected
+Accrual Payment \\ \hline
+1     & \( S \) & 0.03 & \( 0.03 \cdot e^{-0.05 \cdot 0.5} = 0.0293 S \) \\ \hline
+2     & \( S \) & 0.0291 & \( 0.0291 \cdot e^{-0.05 \cdot 1.5} = 0.0270 S \) \\ \hline
+3     & \( S \) & 0.0282 & \( 0.0282 \cdot e^{-0.05 \cdot 2.5} = 0.0248 S \) \\ \hline
+4     & \( S \) & 0.0274 & \( 0.0274 \cdot e^{-0.05 \cdot 3.5} = 0.0229 S \) \\ \hline
+\textbf{Total} &       &                       & \textbf{0.1040 \( S \)} \\ \hline
+\end{tabular}
+}
+\caption{Present Value of the Premium in case of Default}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\resizebox{1.05\linewidth}{!}{
+\begin{tabular}{|c|c|c|c|}
+\hline
+Dates & Recovery Rate & Default Prob. & PV of Expected
+Payoff \\ \hline
+1     & 0.4 & 0.03 & \( 0.6 \cdot 0.03 \cdot e^{-0.05 \cdot 0.5} = 0.0176 \) \\ \hline
+2     & 0.4 & 0.0291 & \( 0.6 \cdot 0.0291 \cdot e^{-0.05 \cdot 1.5} = 0.0162 \) \\ \hline
+3     & 0.4 & 0.0282 & \( 0.6 \cdot 0.0282 \cdot e^{-0.05 \cdot 2.5} = 0.0149 \) \\ \hline
+4     & 0.4 & 0.0274 & \( 0.6 \cdot 0.0274 \cdot e^{-0.05 \cdot 3.5} = 0.0138 \) \\ \hline
+\textbf{Total} &       &                       & \textbf{0.0625} \\ \hline
+\end{tabular}
+}
+\caption{ Present Value of the Compensation in case of Default.\\}
+\end{table}
+
+\noindent According to our calculations:
+
+\[3.2455 S + 0.1040 S = 0.0625\]
+
+\noindent Simplifying this equation to find \( S \):
+\[3.3495 S = 0.0625\]
+\[S = \frac{0.0625}{3.3495}\approx 0.0187\]\\
+
+\noindent Thus, the CDS premium is approximately 1.87\%.\\
+
+\subsection{CDS Duplication \&\ Arbitrage Opportunities}
+\noindent In the context of arbitrage and the replication of CDS, an important relationship exists between the spread of a CDS and the spread of the reference bond. When an investor buys the reference bond, they receive the bond's coupons, denoted as \( \text{coupon}_t \). To finance this bond on the repo market, they must pay the LIBOR rate, denoted as \( \text{libor}_t \). By using an asset swap, the cash flows are adjusted as follows: the investor pays the bond's coupon and receives the LIBOR rate plus the asset swap spread (\( \text{ASS}_t \)), resulting in a net expression of \(- \text{coupon}_t + \text{libor}_t + \text{ASS}_t\).\\
+
+\noindent To balance the cash flows, the CDS spread, denoted as \( \text{CDSS}_t \), must equal the asset swap spread, \( \text{ASS}_t \). This relationship is expressed as follows:
+
+\[\text{CDSS}_t = \text{ASS}_t\]
+
+\noindent Here, \( \text{CDSS}_t \) represents the CDS spread at maturity \( t \), and \( \text{ASS}_t \) represents the asset swap spread of the reference bond at maturity \( t \). The difference between \( \text{CDSS}_t \) and \( \text{ASS}_t \), called the basis and denoted as \( \text{B}_t \), should theoretically be zero in an efficient market:
+
+\[\text{B}_t = \text{CDSS}_t - \text{ASS}_t = 0\]
+
+\noindent However, arbitrage opportunities can arise when this equality is not maintained. There are two main scenarios:\\
+
+\newline\noindent •\hspace{1em} When \( \text{CDSS}_t \) is less than \( \text{ASS}_t \), it is referred to as a negative basis. This situation can occur due to factors such as the haircut in the repo operation and counterparty risk. In this case, the investor could potentially profit by selling the reference bond and buying a CDS while borrowing against the bond to finance the purchase of the CDS.\\
+
+\newline\noindent •\hspace{1em} When \( \text{CDSS}_t \) is greater than \( \text{ASS}_t \), it is referred to as a positive basis. This situation can be attributed to the liquidity of the bond and CDS markets, the cheapest-to-deliver bond, and constraints on short selling. In this scenario, the investor could profit by buying the reference bond and selling a CDS against this bond.\\
+
+\noindent These anomalies, whether negative or positive bases, represent arbitrage opportunities for astute investors who can exploit market inefficiencies. It is crucial to understand that these opportunities are not without risks, as they can be influenced by market factors such as interest rate fluctuations, changes in credit risk perception, and liquidity availability in the respective markets.\\
+
+\noindent Therefore, while the theoretical relationship between the spreads of CDS and asset swaps is clear, market conditions and the specifics of financial instruments can lead to discrepancies, creating arbitrage opportunities for those able to identify and exploit them effectively.
+
+\end{document}
+
+
+\end{document}

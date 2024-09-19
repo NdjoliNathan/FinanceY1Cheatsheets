@@ -1,0 +1,161 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[a4paper,
+\usepackage{microtype}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usetikzlibrary{calc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{lipsum}
+
+\title{Performance Measures in Portfolio Management}
+\author{Nathan NDJOLI - \href{mailto:nathan.ndjoli1@gmail.com}{nathan.ndjoli1@gmail.com}}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\noindent The notion of performance is crucial in portfolio management as it allows for comparison and adjustment based on risk. Performance measurement is typically done on an ex-post basis, evaluating past returns to assess how well an investment has performed. In the asset management industry, performance metrics are highly valuable for both investors and fund managers. For investors, these metrics provide a clear indication of how their investments are performing relative to benchmarks and their risk appetite. For fund managers, performance measures are essential for demonstrating their skill and effectiveness in managing portfolios.
+
+\section*{Sharpe Ratio}
+
+\noindent The Sharpe ratio is a widely used performance metric that measures the excess return per unit of total risk. It is defined as: \\
+\[ \text{Sharpe} = \frac{E(R_p) - R_f}{\sigma_p} \] \\
+\noindent Where \( E(R_p) \) is the expected return of the portfolio, \( R_f \) is the risk-free rate, and \( \sigma_p \) is the standard deviation of the portfolio's returns. The Sharpe ratio provides an intuitive and simplified approach to evaluate a portfolio's performance by accounting for the total risk associated. In other words, it measures how much excess return is obtained per unit of total risk taken. \\
+
+\begin{figure}[htbp!]
+\centering
+\begin{tikzpicture}
+    \begin{axis}[
+        axis lines=middle,
+        xlabel={$\sigma_p$},
+        ylabel={$E(R_p)$},
+        ymin=0, ymax=9.75,
+        xmin=0, xmax=7.75,
+        width=\textwidth,
+        height=0.5\textwidth,
+        xtick=\empty,
+        ytick=\empty,
+        legend pos=north west]
+    \addplot[no markers, thick, domain=0:20] {x+2};
+    \node[label={270:{$R_f$}}] at (axis cs:-0.3,2.75) {};
+    \node[label={0:{$CML$}},circle,fill,inner sep=0.05pt] at (axis cs:6.5,8.5) {};
+    \draw[black, thick, <->] (axis cs:4,6) -- (axis cs:6.25,8.25) node[midway, above, sloped] {Slope = $\frac{E(R_p) - R_f}{\sigma_p}$};
+    \end{axis}
+\end{tikzpicture}
+\caption{Sharpe Ratio as the slope of the Capital Market Line (CML)}
+\end{figure}
+
+\noindent The  figure graphically illustrates the Sharpe ratio as the slope of the Capital Market Line (CML). The CML represents the relationship between the expected return of a portfolio and its total risk, measured by the standard deviation of the portfolio's returns. The slope of this line corresponds precisely to the Sharpe ratio, indicating the excess return obtained for each unit of risk taken. \\
+
+\noindent The Sharpe ratio is valued for its simplicity and effectiveness in combining return and risk into a single measure. A high Sharpe ratio indicates that the portfolio provides a high excess return relative to the risk taken, which is generally interpreted as better risk-adjusted performance. However, this metric has significant limitations. \\
+
+\noindent One major criticism of the Sharpe ratio is that it does not distinguish between the manager's skill and market movements. High returns can result from excessive risk-taking rather than effective management skills. Additionally, the Sharpe ratio assumes that returns follow a normal distribution, which is not always the case in practice. Financial markets can exhibit skewed returns and extreme events (kurtosis), making the Sharpe ratio less relevant in these contexts. \\
+
+\noindent Furthermore, the Sharpe ratio only considers total risk, ignoring specific risks related to individual assets in the portfolio. This means it does not differentiate between systematic (market) risk and idiosyncratic (specific) risk, which can be a drawback when evaluating the performance of a diversified portfolio. \\
+
+\section*{Treynor Ratio}
+
+\noindent This ratio is particularly useful as it provides insight into how much excess return is being generated for each unit of market risk, where market risk is represented by the portfolio's beta. The beta of the portfolio, denoted as \(\beta_p\), indicates the sensitivity of the portfolio's returns to the movements of the overall market. \\
+
+\noindent Mathematically, the Treynor ratio is defined as: \\
+\[
+\text{Treynor} = \frac{E(R_p) - R_f}{\beta_p}
+\] \\
+\noindent With \(E(R_p)\) the expected return of the portfolio and \(R_f\) the risk-free rate. By considering the beta, the Treynor ratio specifically focuses on the systematic risk of the portfolio, which is the portion of total risk that cannot be eliminated through diversification and is inherently linked to market movements. \\
+
+\noindent The Treynor ratio, therefore, accounts for the risk that investors cannot avoid, making it a valuable tool for assessing portfolios in relation to market risks. However, it introduces complexities concerning the selection of the market portfolio. The market portfolio is supposed to represent the entirety of investable assets in the market, but in practice, it is often approximated by a broad market index, which might not fully capture all relevant assets. This approximation can lead to questions about the accuracy and reliability of the Treynor ratio's indication of performance. \\
+
+\noindent Similar to the Sharpe ratio, the Treynor ratio does not necessarily reflect the manager's skill. High values of the Treynor ratio might result from favorable market conditions rather than the manager's ability to select superior investments or time the market effectively. Consequently, while the Treynor ratio provides a measure of risk-adjusted performance with a focus on systematic risk, it should be interpreted with caution and in conjunction with other performance metrics to gain a comprehensive understanding of a portfolio's performance. 
+
+
+\section*{Jensen's Alpha}
+
+\noindent Jensen's alpha is a performance measure that evaluates the excess return of a portfolio relative to the expected return based on the Capital Asset Pricing Model (CAPM). It is an important metric for determining the added value a portfolio manager brings to the investment process, beyond what could be expected from market movements alone. Mathematically, Jensen's alpha is defined as: \\
+\[
+\alpha_p = E(R_p) - \left[ R_f + \beta_p \left( E(R_M) - R_f \right) \right]
+\] \\
+\noindent where \( E(R_p) \) is the expected return of the portfolio, \( R_f \) is the risk-free rate, \( \beta_p \) is the beta of the portfolio indicating its sensitivity to market movements, and \( E(R_M) \) is the expected market return. \\
+
+
+\begin{figure}[htbp!]
+\centering
+\begin{tikzpicture}
+    \begin{axis}[
+        axis lines=middle,
+        xlabel={$\sigma_p$},
+        ylabel={$E(R_p)$},
+        ymin=0, ymax=12,
+        xmin=0, xmax=20,
+        width=\textwidth,
+        height=0.5\textwidth,
+        xtick=\empty,
+        ytick=\empty,
+        legend pos=north west]
+    \addplot[no markers, thick, domain=0:20] {2.5 + 0.5*x};
+    \node[label={0:{$SML$}},circle,fill,inner sep=0.5pt] at (axis cs:15,10) {};
+    \node at (axis cs:10, 10) {$\alpha_p > 0$};
+    \node at (axis cs:10, 5) {$\alpha_p < 0$};
+    \end{axis}
+\end{tikzpicture}
+\caption{Jensen's Alpha and the Security Market Line}
+\end{figure}
+
+\noindent This measure effectively isolates the portion of the portfolio's return that can be attributed to the manager's investment decisions, as opposed to the inherent risk of the market. A positive alpha indicates that the portfolio has outperformed the expected return given its risk level, suggesting superior managerial skills. Conversely, a negative alpha suggests underperformance relative to the expected return. \\
+
+\noindent Jensen's alpha can be practically determined through regression analysis, which involves comparing the actual portfolio returns with the expected returns predicted by the CAPM. This regression equation is: \\
+\[
+E(R_p) - R_f = \alpha_p + \beta_p \left( E(R_M) - R_f \right) + \epsilon_p
+\] \\
+\noindent In this equation, \( \epsilon_p \) represents the error term, capturing the portion of the portfolio's returns that cannot be explained by the market return and the portfolio's beta. The alpha (\(\alpha_p\)) derived from this regression indicates the average incremental return that the portfolio manager has generated, adjusting for the market risk taken. \\
+
+\noindent This method of performance evaluation is particularly valuable because it not only provides a measure of outperformance or underperformance but also attributes the results to managerial skill rather than market movements. It offers investors a clearer understanding of a manager's effectiveness in selecting securities and timing the market.  \\
+
+\section*{Information Ratio}
+
+\noindent The Information Ratio (IR) is a performance metric in finance that evaluates a portfolio's return above a benchmark relative to the additional risk taken. This ratio is valuable for investors and portfolio managers as it provides insight into the efficiency of a portfolio manager's decisions, highlighting their ability to generate superior returns compared to a benchmark index. Mathematically, the Information Ratio is expressed as: \\
+\[
+\text{IR} = \frac{E(R_p) - E(R_b)}{\sigma_{p-b}}
+\] \\
+\noindent Where \(E(R_p)\) represents the expected return of the portfolio, \(E(R_b)\) is the expected return of the benchmark, and \(\sigma_{p-b}\) denotes the tracking error, which is the standard deviation of the portfolio's excess returns over the benchmark. The tracking error captures the variability of the portfolio's returns relative to the benchmark, reflecting the additional risk taken by deviating from the benchmark's composition. \\
+
+\noindent The Information Ratio evaluates the balance between the portfolio's outperformance and the consistency of that outperformance. A higher IR indicates that the portfolio manager has achieved greater excess returns relative to the benchmark while maintaining a relatively low level of additional risk. Conversely, a lower IR suggests that the excess returns are not commensurate with the level of risk taken. \\
+
+\noindent This metric is insightful because it considers both the magnitude of excess returns and the risk involved in achieving them. Unlike other performance measures that may focus solely on returns or risk, the Information Ratio provides a comprehensive view by integrating these two aspects. It measures the quality of the portfolio manager's decisions, emphasizing the importance of consistent and sustainable outperformance over simply achieving high returns. \\
+
+\noindent In practice, the Information Ratio is widely used by institutional investors and fund managers to compare the performance of various portfolios and strategies. It helps identify managers who can deliver superior risk-adjusted returns, facilitating more informed investment decisions. By considering the benchmark, it aligns performance evaluation with the investor's objectives, ensuring that the portfolio's performance is assessed relative to relevant market conditions and benchmarks. \\
+
+\section*{Discussion of Traditional Indicators}
+
+\noindent Traditional performance indicators have limitations, including criticisms of the CAPM and the instability of risk measures. The Capital Asset Pricing Model (CAPM), while foundational in finance, has been criticized for its assumptions, such as the market portfolio's composition and the constancy of beta over time.\\
+
+\noindent Additionally, traditional risk measures like standard deviation and beta can be unstable and may not fully capture the risks associated with investments, especially during periods of market stress. \\
+
+\noindent To address these limitations, other performance indicators have been developed. These include measures that incorporate loss aversion, which recognizes that investors are more sensitive to losses than to gains of the same magnitude. This approach aligns more closely with actual investor behavior, offering a more realistic assessment of risk and return.\\
+
+\noindent Furthermore, extra-financial criteria, such as environmental, social, and governance (ESG) factors, have become increasingly important in evaluating investment performance. These criteria take into account the broader impact of investments, beyond financial returns, and reflect a growing awareness of sustainable and responsible investing. \\
+
+\noindent These alternative measures provide a more comprehensive view of performance by considering factors beyond simple risk and return. By integrating loss aversion and extra-financial criteria, investors can gain a deeper understanding of the true value and impact of their investments. This holistic approach to performance measurement is essential for making informed investment decisions that align with both financial objectives and broader societal values. \\
+
+\section*{Fund Performance and Reporting: Regulatory Elements}
+
+\noindent Regulation plays a significant role in the reporting of fund performance. The Key Information Document (KID) provides essential information for retail investors under the PRIIPs regulation. This document outlines the product characteristics, including a Synthetic Risk Indicator, performance scenarios, recommended holding periods, and associated costs. \\
+
+\noindent Additionally, reporting standards such as those set by the Association for Investment Management and Research (AIMR) and the Global Investment Performance Standards (GIPS) ensure transparency and consistency in performance reporting. These standards help maintain investor confidence and ensure fair comparisons across different investment funds. By adhering to these regulations and standards, fund managers can provide clear, accurate, and comparable performance data, which is crucial for informed investment decisions. \\
+
+\noindent The KID, under the PRIIPs regulation, specifically aims to enhance investor protection by offering a standardized, easy-to-understand format for presenting key information. The Synthetic Risk Indicator included in the KID helps investors assess the risk level of the product, while performance scenarios illustrate potential outcomes based on different market conditions. Recommended holding periods provide guidance on the optimal duration for holding the investment to achieve the best results, and the detailed cost breakdown ensures that investors are aware of all associated fees and charges. \\
+
+\noindent The AIMR and GIPS standards further contribute to the robustness of fund performance reporting. These standards promote best practices in performance calculation and presentation, ensuring that all performance data is presented fairly and consistently. This not only facilitates better comparison between different funds but also enhances overall market transparency and integrity. \\
+
+\noindent In summary, regulatory elements such as the KID and reporting standards like AIMR and GIPS play a crucial role in the accurate and transparent reporting of fund performance. They provide the necessary framework for fund managers to present performance data in a clear and standardized manner, thereby supporting investor confidence and enabling more informed investment decisions. \\
+
+
+\end{document}

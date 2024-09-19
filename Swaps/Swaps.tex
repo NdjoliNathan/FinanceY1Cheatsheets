@@ -1,0 +1,151 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\title{Swaps}
+\author{Nathan NDJOLI - \href{mailto:nathan.ndjoli1@gmail.com}{nathan.ndjoli1@gmail.com}}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+    \section*{Definition of Swaps}
+    
+        \noindent A swap is a contract between two parties that involves the exchange of future cash flows over a limited period. Swaps are essentially over-the-counter (OTC) products. The notional or principal amount serves as the basis for calculating the cash flows. The value date is the date from which the swap becomes effective. The maturity date is the end date of the contract. The legs correspond to the exchanged cash flows.\\\\There are several types of swaps. Among the most common are interest rate swaps, currency swaps, and foreign exchange swaps. Interest rate swaps involve exchanging interest payments between a fixed rate and a floating rate. Currency swaps involve exchanging payments in different currencies. Foreign exchange swaps involve exchanging a fixed amount in one currency for a variable amount in another currency.
+    
+    \section*{Payment Flows}
+    
+        \noindent Let's consider an example of an interest rate swap between two banks, A and B, with a notional amount of 100 million euros and a value date of March 15, 2007. Bank A agrees to pay a fixed interest rate of 2.4\% every six months to Bank B, while Bank B agrees to pay Bank A the 6-month Euribor rate. The detailed payment flows are as follows:
+        
+        \begin{table}[h!]
+        \centering
+        \begin{tabularx}{\textwidth}{Y *{4}{>{\centering\arraybackslash}X}}
+        \toprule
+        \textbf{Date} & \textbf{6-months Euribor} & \textbf{Variable +Flow} & \textbf{Fixed Flow} & \textbf{Net Flow} \\
+        \midrule
+        15/03/2007 & 4.01\% & & & \\
+        15/09/2007 & 4.73\% & 2.005 & -1.2 & 0.805 \\
+        15/03/2008 & 4.66\% & 2.365 & -1.2 & 1.165 \\
+        15/09/2008 & 5.23\% & 2.33 & -1.2 & 1.13 \\
+        15/03/2009 & 1.73\% & 2.615 & -1.2 & 1.415 \\
+        \bottomrule
+        \end{tabularx}
+        \caption{Interest Rate Swap Payment Flows}
+        \end{table}
+        
+        \noindent Each payment date represents the settlement of interest payments based on the agreed terms, allowing both banks to hedge against interest rate fluctuations.\\
+        
+        \noindent Another example is a currency swap between Microsoft and L’Oréal over a four-year period, with a value date of April 1st of year t. Microsoft agrees to pay an annual fixed rate of 5\% in euros to L’Oréal on a principal of 10 million euros. In return, L’Oréal agrees to pay a fixed rate of 4\% in dollars to Microsoft on a principal of 11.5 million dollars. The detailed payment flows are as follows:
+        
+        \begin{table}[h!]
+        \centering
+        \begin{tabularx}{\textwidth}{Y *{2}{>{\centering\arraybackslash}X}}
+        \toprule
+        \textbf{Date} & \textbf{Euros Paid by Microsoft (in M)} & \textbf{Dollars Received by Microsoft (in M)} \\
+        \midrule
+        01/04/year t & 10 & -11.5 \\
+        01/04/year t+1 & -0.5 & 0.46 \\
+        01/04/year t+2 & -0.5 & 0.46 \\
+        01/04/year t+3 & -0.5 & 0.46 \\
+        01/04/year t+4 & -10.5 & 11.96 \\
+        \bottomrule
+        \end{tabularx}
+        \caption{Currency Swap Payment Flows}
+        \end{table}
+        
+        \noindent Throughout the term of the currency swap, both companies benefit from hedging against currency and interest rate risks, while the periodic interest payments and principal exchanges ensure that the agreed financial obligations are met, leading to financial stability and predictability for both parties.
+    
+    \section*{The Use of Interest Rate Swaps}
+    
+        \noindent The use of interest rate swaps can offer significant advantages to borrowers due to comparative advantages. For two given borrowers, the conditions for accessing the fixed rate and variable rate credit markets are not necessarily the same. For example, one company may have a comparative advantage in obtaining fixed-rate credit, while another may benefit from better conditions for a variable-rate loan.
+        
+        \begin{table}[h!]
+        \centering
+        \begin{tabularx}{\textwidth}{YYY}
+        \toprule
+         & \textbf{Firm i} & \textbf{Firm j} \\
+        \midrule
+        \textbf{Rating} & AA & BB \\
+        \textbf{Fixed Rate} & 5\% & 6\% \\
+        \textbf{Variable Rate} & Libor + 50 bp & Libor + 70 bp \\
+        \bottomrule
+        \end{tabularx}
+        \caption{Interest Rate Swap Example}
+        \end{table}
+        
+        \noindent Let's consider the case of firm i and firm j to illustrate this situation. Firm i, with an AA rating, can borrow at a fixed rate of 5\% or a variable rate of Libor + 50 basis points (bp). In contrast, firm j, with a BB rating, can borrow at a fixed rate of 6\% or a variable rate of Libor + 70 bp. Although both companies have access to different credit conditions, their financial needs may not match these conditions. Firm i might need funds at a variable rate, while firm j might prefer a fixed rate.\\
+        
+        \noindent To meet their respective needs, the two companies can enter into an interest rate swap. In this case, firm i borrows from its bank at a fixed rate of 5\%, while firm j borrows at a variable rate of Libor + 70 bp. They then exchange these rates. Thus, firm i starts paying firm j a variable rate, and firm j pays firm i a fixed rate.\\
+        
+        \noindent The cash flows of the operation with the swap show that firm i, which initially pays a fixed rate of 5\% to its bank, receives the variable rate from firm j and pays the Libor rate, resulting in a net flow of:
+        \[-0.05 + r - \text{Libor}\]
+        
+        \noindent On the other hand, firm j, which initially pays the Libor rate to its bank, additionally pays a rate of 70 bp to firm i and receives the fixed rate from firm i, resulting in a net flow of:
+        \[-\text{Libor} - 0.0070 - r\]
+        
+        \noindent Without this swap, the cash flows of the loan show that firm i would have had to pay a rate of Libor + 50 bp, while firm j would have had to pay a fixed rate of 6\%. The comparison of the cash flows clearly shows that thanks to the swap, firm i benefits from a fixed payment of 5\% instead of the higher variable rate, and firm j pays a variable rate of Libor + 70 bp instead of a higher fixed rate of 6\%.\\
+        
+        \noindent It is important to note that setting up a swap may require the intervention of a financial intermediary. This intermediary helps manage the transaction costs of finding an appropriate counterparty and mitigate counterparty risk, which is the risk that one of the parties will not fulfill its contractual obligations. In our example, if a financial intermediary is involved, each company pays a small additional commission of 5 bp. Thus, firm i would see its net flow adjusted to:
+        \[-0.05 + r - \text{Libor} - 0.0005\]
+        
+        \noindent and firm j to:
+        \[-\text{Libor} - 0.0070 - r - 0.0005\]
+        
+        \noindent Although this commission adds an extra cost, it facilitates the transaction and reduces the associated risks, making the whole process more secure and efficient for both companies.
+    
+    \section*{Valuation of Interest Rate Swaps}
+    
+        \noindent The valuation of interest rate swaps is based on the principle of valuing the two legs of the swap, the fixed leg and the floating leg. To value the fixed leg, it is necessary to calculate, for each date t, the fixed amount, which depends on the notional amount, the fixed rate, and the duration between two payments. Each cash flow is then discounted, and the value of the fixed leg is obtained by summing all the discounted fixed cash flows.\\
+        
+        \noindent For the valuation of the floating leg, the variable amount for each date t is calculated, which depends on the notional amount, the observed variable rate at the previous payment date, and the duration between two payments. Each variable cash flow is also discounted, and the value of the floating leg is the sum of all the discounted variable cash flows.\\
+        
+        \noindent To value a swap, it is necessary to know the forward rate curve. The fixed rate is set so that the initial value of the swap is zero, which means equalizing the initial value of the fixed leg and the initial value of the floating leg.\\
+        
+        \noindent Let’s consider the example of an interest rate swap with a notional amount of 100 million euros, starting on January 1, 2016, and maturing in three years. According to the terms of this swap, the 6-month Euribor is exchanged for a fixed rate on a semi-annual basis. The forward interest rates for the various periods are as follows:
+        
+        \begin{table}[h!]
+        \centering
+        \begin{tabularx}{\textwidth}{YY}
+        \toprule
+        \textbf{Period} & \textbf{Forward Rate} \\
+        \midrule
+        01/16 - 06/16 & 4.00\% \\
+        07/16 - 12/16 & 4.25\% \\
+        01/17 - 06/17 & 4.50\% \\
+        07/17 - 12/17 & 4.75\% \\
+        01/18 - 06/18 & 5.00\% \\
+        07/18 - 12/18 & 5.25\% \\
+        \bottomrule
+        \end{tabularx}
+        \caption{Forward interest rates for each period}
+        \end{table}
+        
+        \noindent To calculate the value of this swap, the discounted value of the cash flows of each leg for each period using the given forward rates must be determined.\\
+        
+        \noindent Another example is an interest rate swap with a notional amount of 1 million euros, with a remaining life of 15 months. According to the terms of this swap, the 6-month Libor is exchanged for a fixed rate of 6\% on a semi-annual basis. The spot rates for the 3-month, 9-month, and 15-month maturities are as follows:
+        
+        \begin{table}[h!]
+        \centering
+        \begin{tabularx}{\textwidth}{YY}
+        \toprule
+        \textbf{Maturity} & \textbf{Spot Rate} \\
+        \midrule
+        3 months & 5.40\% \\
+        9 months & 5.60\% \\
+        15 months & 5.80\% \\
+        \bottomrule
+        \end{tabularx}
+        \caption{Spot rates for each maturity}
+        \end{table}
+        
+        \noindent The 6-month Libor at the last payment date, three months ago, was 5\%. To calculate the values of the fixed and floating legs of this swap, the future cash flows of each leg must be discounted using the given spot rates and the discounted values must be compared to determine the net value of the swap.
+
+\end{document}
